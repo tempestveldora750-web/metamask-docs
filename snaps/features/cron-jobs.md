@@ -1,4 +1,27 @@
----
+---import type { OnCronjobHandler } from "@metamask/snaps-sdk";
+import { Box, Heading, Text } from "@metamask/snaps-sdk/jsx";
+
+export const onCronjob: OnCronjobHandler = async ({ request }) => {
+  switch (request.method) {
+    case "execute":
+      // Cron jobs can execute any method that is available to the Snap.
+      return snap.request({
+        method: "snap_dialog",
+        params: {
+          type: "alert",
+          content: (
+            <Box>
+              <Heading>Cron job</Heading>
+              <Text>This dialog was triggered by a cron job.</Text>
+            </Box>
+          ),
+        },
+      });
+
+    default:
+      throw new Error("Method not found.");
+  }
+};
 description: Schedule periodic actions for your users.
 sidebar_position: 1
 ---
